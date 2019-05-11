@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Using Playground</title>
+</head>
+<body>
+    <!-- Thanks to https://github.com/x-tag/core/blob/master/polyfills/custom-elements.min.js -->
+    <script src="assets/custom-elements.min.js"></script>
+    <script src="assets/require.development.js"></script>
+    <script>
+
+        require.config({
+            baseUrl: 'js'
+        });
+
+        require(["main"]);
+
+    </script>
+</body>
+</html>

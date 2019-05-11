@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Using Playground</title>
+</head>
+<body>
+    <!-- Thanks to https://github.com/x-tag/core/blob/master/polyfills/custom-elements.min.js -->
+    <script src="assets/custom-elements.min.js"></script>
+    <script src="assets/require.development.js"></script>
+    <script>
+
+require.config({
+    baseUrl: 'js'
+});
+
+require(["using", "app", "tests"], function (using, App, tests) {
+
+    function trace() {
+        console.log.apply(console, arguments);
+    }
+
+    function pass() {
+        console.info.apply(console, arguments);
+    }
+
+    function fail() {
+        console.error.apply(console, arguments);
+    }
+
+    function expect(system, message) {
+        return {
+            toEqual: function toEqual(expected) {
+                const condition = JSON.stringify(system) === JSON.stringify(expected);
+                if (!condition) {
+                    throw new Error([
+                        "Expected " + JSON.stringify(system),
+                        " to equal " + JSON.stringify(expected),
+                        message,
+                    ].join(""));
+                }
+            },
+        };
+    }
+
+    function it(should, test) {
+        trace("> ", should);
+
+        try {
+            test(expect);
+        } catch (error) {
+            fail(name, error);
+        }
+    }
+
+    function describe(name, test) {
+        trace(name);
+
+        try {
+            test(it);
+        } catch (error) {
+            fail(name, error);
+        }
+    }
+    describe.trace = trace;
+
+    window.App = App;
+    window.using = using;
+
+    tests(describe, App, using);
+});
+
+    </script>
+</body>
+</html>
